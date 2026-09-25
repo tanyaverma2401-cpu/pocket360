@@ -121,14 +121,54 @@ function simulateOCRScan() {
 
 // AI Voice Intelligence Engine Simulation
 function simulateVoiceInput() {
-  document.getElementById('aiLogText').innerText = "Voice Log: Listening to speech audio...";
-  setTimeout(() => {
-    const mockVoiceCommand = "Spent 450 rupees on dinner";
-    const parsedIntent = { amount: 450, category: "Food", type: "Expense" };
-    appState.voiceLogs.push({ log_id: Date.now(), stt: mockVoiceCommand, parsed: parsedIntent });
-    addTransaction("Expense", parsedIntent.amount, "Voice Command: " + mockVoiceCommand, parsedIntent.category);
-    document.getElementById('aiLogText').innerText = `Voice Parsed: "${mockVoiceCommand}"`;
-  }, 1000);
+  // Real Voice Assistant using Web Speech API
+function simulateVoiceInput() {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  
+  if (!SpeechRecognition) {
+    alert("Aapka browser Voice Recognition support nahi karta. Please Google Chrome use karein.");
+    return;
+  }
+
+  const recognition = new SpeechRecognition();
+  recognition.lang = 'hi-IN'; // Hindi aur English dono samjhega
+  recognition.interimResults = false;
+
+  const statusText = document.getElementById('aiLogText');
+  statusText.innerText = "🎙️ Sun raha hoon... Boliye (e.g. Spent 500 on Food)";
+  statusText.style.color = "#3b82f6";
+
+  recognition.start();
+
+  recognition.onresult = function(event) {
+    const transcript = event.results[0][0].transcript;
+    statusText.innerText = `Aawaz mili: "${transcript}"`;
+    statusText.style.color = "#10b981";
+
+    // Text se amount (numbers) nikalna
+    const numbers = transcript.match(/\d+/);
+    const amount = numbers ? parseFloat(numbers[0]) : 100;
+
+    // Transaction History mein add karna
+    const currentRole = document.getElementById('userRole').value;
+    const newTrans = {
+      id: Date.now(),
+      type: 'Expense',
+      category: 'Food',
+      note: `Voice: ${transcript}`,
+      amount: amount,
+      role: currentRole
+    };
+
+    transactions.push(newTrans);
+    saveAndRender();
+  };
+
+  recognition.onerror = function(event) {
+    statusText.innerText = "❌ Mic Error / Permission Denied. Redo karein.";
+    statusText.style.color = "#ef4444";
+  };
+}
 }
 
 function renderUI() {
