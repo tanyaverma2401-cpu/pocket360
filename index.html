@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pocket 360 - Master Budgeting Suite</title>
+  <!-- Chart.js Engine -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+  <!-- Top Navigation & Profile Switcher -->
+  <div class="header-bar card">
+    <div>
+      <h2 style="margin: 0;">Pocket 360 <span style="font-size: 14px; color: var(--primary);">v2.0 Master</span></h2>
+      <small>Universal Role Budgeting System</small>
+    </div>
+    <div style="display: flex; gap: 10px; align-items: center;">
+      <select id="userRole" onchange="switchRole()">
+        <option value="Student">Student</option>
+        <option value="Housewife">Housewife / Husband</option>
+        <option value="CEO">CEO / Manager</option>
+        <option value="Admin">System Admin</option>
+      </select>
+      <button onclick="toggleTheme()">🌗 Theme</button>
+    </div>
+  </div>
+
+  <!-- Budget Alert System -->
+  <div id="budgetAlert" class="alert-box">
+    ⚠️ Warning: Over 80% Budget Threshold Reached!
+  </div>
+
+  <!-- Main Grid Architecture -->
+  <div class="grid-2">
+    <!-- Left Column: Controls & Inputs -->
+    <div>
+      <!-- Budget Ceiling Settings -->
+      <div class="card">
+        <h3>1. Budget Limit (BUDGETS Module)</h3>
+        <div class="form-group">
+          <input type="number" id="budgetLimitInput" placeholder="Monthly Ceiling (e.g. 10000)">
+          <button onclick="setBudgetCeiling()">Set Threshold</button>
+        </div>
+        <small id="budgetText">Current Limit: ₹0.00</small>
+      </div>
+
+      <!-- Transaction Entry -->
+      <div class="card">
+        <h3>2. Transactions (TRANSACTIONS Module)</h3>
+        <div class="form-group">
+          <select id="transType">
+            <option value="Income">Income (+)</option>
+            <option value="Expense">Expense (-)</option>
+          </select>
+          <select id="transCategory"></select>
+        </div>
+        <div class="form-group">
+          <input type="text" id="transNote" placeholder="Description / Note" style="flex: 1;">
+          <input type="number" id="transAmount" placeholder="Amount (₹)" style="width: 100px;">
+        </div>
+        <button onclick="addTransaction()" style="width: 100%;">Add Entry</button>
+      </div>
+
+      <!-- OCR & Voice Intelligent Input Simulation -->
+      <div class="card">
+        <h3>3. AI Intelligence (OCR & Voice Logs)</h3>
+        <div class="form-group">
+          <button class="btn-warning" onclick="simulateVoiceInput()">🎙️ Voice Assistant Log</button>
+          <button class="btn-success" onclick="simulateOCRScan()">📄 Scan OCR Receipt</button>
+        </div>
+        <small id="aiLogText" style="color: #94a3b8;">Status: AI Modules Ready</small>
+      </div>
+    </div>
+
+    <!-- Right Column: Visual Charts & Analytics -->
+    <div>
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <h3>Financial Analytics</h3>
+          <button onclick="exportCSV()">📊 Export CSV</button>
+        </div>
+        <div class="chart-box">
+          <canvas id="budgetChart"></canvas>
+        </div>
+      </div>
+
+      <div class="card" id="adminPanel" style="display: none; border: 1px solid var(--warning);">
+        <h3 style="color: var(--warning);">Admin Management Panel</h3>
+        <p>System User Access Control & Data Purge Operations.</p>
+        <button class="btn-danger" onclick="clearAllData()">Reset Entire System Data</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Transaction Records Table/List -->
+  <div class="card">
+    <h3>Transaction History</h3>
+    <ul id="transactionList" class="transaction-list"></ul>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
