@@ -181,8 +181,8 @@ function simulateVoiceInput() {
     statusText.innerText = "❌ Mic Error / Permission Denied. Redo karein.";
     statusText.style.color = "#ef4444";
   };
-}
-}
+
+
 
 function renderUI() {
   // 1. Role Check
