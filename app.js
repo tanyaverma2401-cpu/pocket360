@@ -122,6 +122,7 @@ function simulateOCRScan() {
 // AI Voice Intelligence Engine Simulation
 function simulateVoiceInput() {
   // Real Voice Assistant using Web Speech API
+function simulateVoiceInput() {// Real Voice Assistant using Web Speech API
 function simulateVoiceInput() {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   
@@ -158,6 +159,18 @@ function simulateVoiceInput() {
       note: `Voice: ${transcript}`,
       amount: amount,
       role: currentRole
+    };
+
+    transactions.push(newTrans);
+    saveAndRender();
+  };
+
+  recognition.onerror = function(event) {
+    statusText.innerText = "❌ Mic Error / Permission Denied. Redo karein.";
+    statusText.style.color = "#ef4444";
+  };
+}
+
     };
 
     transactions.push(newTrans);
