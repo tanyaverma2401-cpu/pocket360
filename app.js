@@ -306,4 +306,60 @@ function handleGoogleLogin() {
   document.getElementById('loginScreen').style.display = 'none';
   alert("Google Login Successful!");
 }
+// Manual Login / Signup Handler
+function handleManualLogin(event) {
+  if (event) event.preventDefault(); // Page refresh hone se roke
+
+  const name = document.getElementById('loginName')?.value?.trim();
+  const email = document.getElementById('loginEmail')?.value?.trim();
+  const phone = document.getElementById('loginPhone')?.value?.trim();
+
+  if (!name || !email || !phone) {
+    alert("कृपया नाम, ईमेल और फोन नंबर तीनों भरें!");
+    return;
+  }
+
+  // User details save karein
+  const userData = { name, email, phone, loginType: 'Manual' };
+  localStorage.setItem('pocket360_user', JSON.stringify(userData));
+
+  // Login Screen ko completely hide karein
+  const loginOverlay = document.getElementById('loginScreen');
+  if (loginOverlay) {
+    loginOverlay.style.display = 'none';
+  }
+
+  alert(`Welcome ${name}! Pocket 360 Dashboard mein aapka swagat hai.`);
+}
+
+// Google Login Handler
+function handleGoogleLogin(event) {
+  if (event) event.preventDefault();
+
+  const googleUser = {
+    name: "Google User",
+    email: "user@gmail.com",
+    phone: "Not Provided",
+    loginType: 'Google'
+  };
+
+  localStorage.setItem('pocket360_user', JSON.stringify(googleUser));
+
+  // Login Screen ko hide karein
+  const loginOverlay = document.getElementById('loginScreen');
+  if (loginOverlay) {
+    loginOverlay.style.display = 'none';
+  }
+
+  alert("Google Login Successful!");
+}
+
+// Page load hone par check karein ki user pehle se login hai ya nahi
+window.addEventListener('load', () => {
+  const savedUser = localStorage.getItem('pocket360_user');
+  if (savedUser) {
+    const loginOverlay = document.getElementById('loginScreen');
+    if (loginOverlay) loginOverlay.style.display = 'none';
+  }
+});
 }
