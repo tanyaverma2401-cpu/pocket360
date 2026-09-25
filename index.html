@@ -9,7 +9,28 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<!-- LOGIN / SIGNUP OVERLAY (YAHAN PASTE KAREIN) -->
+  <div id="loginScreen" class="login-overlay">
+    <div class="card login-card">
+      <h2>Welcome to Pocket 360 🚀</h2>
+      <p>Please sign in to access your personal budget suite.</p>
+      
+      <!-- Google Sign-In Simulation Button -->
+      <button class="btn-google" onclick="handleGoogleLogin()">
+        <span>🌐</span> Continue with Google
+      </button>
+      
+      <div class="divider">OR</div>
 
+      <!-- Manual Register/Login Form -->
+      <div class="form-group" style="flex-direction: column; gap: 10px;">
+        <input type="text" id="loginName" placeholder="Full Name" style="width: 100%;">
+        <input type="email" id="loginEmail" placeholder="Email Address" style="width: 100%;">
+        <input type="tel" id="loginPhone" placeholder="Phone Number" style="width: 100%;">
+        <button onclick="handleManualLogin()" style="width: 100%; margin-top: 5px;">Login / Sign Up</button>
+      </div>
+    </div>
+  </div>
 <div class="container">
   <!-- Top Navigation & Profile Switcher -->
   <div class="header-bar card">
