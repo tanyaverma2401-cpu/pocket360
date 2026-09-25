@@ -10,27 +10,29 @@
 </head>
 <body>
 <!-- LOGIN / SIGNUP OVERLAY (YAHAN PASTE KAREIN) -->
-  <div id="loginScreen" class="login-overlay">
-    <div class="card login-card">
-      <h2>Welcome to Pocket 360 🚀</h2>
-      <p>Please sign in to access your personal budget suite.</p>
-      
-      <!-- Google Sign-In Simulation Button -->
-      <button class="btn-google" onclick="handleGoogleLogin()">
-        <span>🌐</span> Continue with Google
-      </button>
-      
-      <div class="divider">OR</div>
+  
+    <!-- LOGIN OVERLAY -->
+<div id="loginScreen" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); display: flex; justify-content: center; align-items: center; z-index: 999999;">
+  <div style="background: #1e293b; padding: 30px; border-radius: 16px; border: 1px solid #334155; width: 90%; max-width: 380px; text-align: center; color: white; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);">
+    <h2 style="margin-top: 0; color: #60a5fa;">Pocket 360 🚀</h2>
+    <p style="color: #94a3b8; font-size: 14px;">Dashboard खोलने के लिए लॉगिन करें</p>
+    
+    <!-- Google Login -->
+    <button onclick="handleGoogleLogin()" style="background: white; color: #0f172a; border: none; width: 100%; padding: 12px; font-weight: bold; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 15px;">
+      🌐 Continue with Google
+    </button>
+    
+    <div style="color: #64748b; font-size: 12px; margin: 10px 0;">OR</div>
 
-      <!-- Manual Register/Login Form -->
-      <div class="form-group" style="flex-direction: column; gap: 10px;">
-        <input type="text" id="loginName" placeholder="Full Name" style="width: 100%;">
-        <input type="email" id="loginEmail" placeholder="Email Address" style="width: 100%;">
-        <input type="tel" id="loginPhone" placeholder="Phone Number" style="width: 100%;">
-        <button onclick="handleManualLogin()" style="width: 100%; margin-top: 5px;">Login / Sign Up</button>
-      </div>
+    <!-- Manual Login Form -->
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+      <input type="text" id="loginName" placeholder="Full Name" style="padding: 10px; border-radius: 6px; border: 1px solid #475569; background: #0f172a; color: white;">
+      <input type="email" id="loginEmail" placeholder="Email Address" style="padding: 10px; border-radius: 6px; border: 1px solid #475569; background: #0f172a; color: white;">
+      <input type="tel" id="loginPhone" placeholder="Phone Number" style="padding: 10px; border-radius: 6px; border: 1px solid #475569; background: #0f172a; color: white;">
+      <button onclick="handleManualLogin()" style="background: #2563eb; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 5px;">Login / Sign Up</button>
     </div>
   </div>
+</div>
 <div class="container">
   <!-- Top Navigation & Profile Switcher -->
   <div class="header-bar card">

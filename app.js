@@ -287,4 +287,23 @@ function clearAllData() {
     localStorage.removeItem('pocket360_master_db');
     location.reload();
   }
+  // Login Check and Actions
+function handleManualLogin() {
+  const name = document.getElementById('loginName').value;
+  const email = document.getElementById('loginEmail').value;
+  const phone = document.getElementById('loginPhone').value;
+
+  if (!name || !email || !phone) {
+    alert("कृपया नाम, ईमेल और फोन नंबर भरें!");
+    return;
+  }
+
+  document.getElementById('loginScreen').style.display = 'none';
+  alert("Login Successful! Welcome " + name);
+}
+
+function handleGoogleLogin() {
+  document.getElementById('loginScreen').style.display = 'none';
+  alert("Google Login Successful!");
+}
 }
