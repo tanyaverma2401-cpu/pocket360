@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pocket 360 - Admin Panel</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white p-8">
+  <div class="max-w-4xl mx-auto">
+    <h1 class="text-3xl font-bold text-indigo-400 mb-6">Pocket 360 Admin Panel</h1>
+    
+    <div class="bg-slate-800 rounded-xl p-6 shadow-xl">
+      <h2 class="text-xl font-semibold mb-4">User List</h2>
+      <table class="w-full text-left">
+        <thead>
+          <tr class="border-b border-slate-700 text-slate-400">
+            <th class="p-3">ID</th>
+            <th class="p-3">Name</th>
+            <th class="p-3">Balance</th>
+            <th class="p-3">Status</th>
+          </tr>
+        </thead>
+        <tbody id="userTable">
+          <!-- Dynamic Users -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    async function loadAdminData() {
+      try {
+        const res = await fetch('http://localhost:5000/api/admin/users');
+        const data = await res.json();
+        if (data.success) {
+          const tbody = document.getElementById('userTable');
+          tbody.innerHTML = '';
+          data.users.forEach(user => {
+            tbody.innerHTML += `
+              <tr class="border-b border-slate-700">
+                <td class="p-3">#${user.id}</td>
+                <td class="p-3">${user.name}</td>
+                <td class="p-3">₹${user.balance}</td>
+                <td class="p-3">${user.status}</td>
+              </tr>
+            `;
+          });
+        }
+      } catch (err) {
+        console.error('Error:', err);
+      }
+    }
+    loadAdminData();
+  </script>
+</body>
+</html>
