@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pocket 360 - User Panel</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex justify-center items-center min-h-screen">
+  <div class="bg-white p-6 rounded-2xl shadow-lg w-80 text-center">
+    <h2 class="text-xl font-bold text-indigo-600 mb-4">Pocket 360 User</h2>
+    <div class="bg-indigo-50 p-4 rounded-xl mb-4">
+      <p id="userName" class="font-semibold text-gray-700">Loading...</p>
+      <p id="userBalance" class="text-2xl font-bold text-indigo-600 mt-2">₹0</p>
+    </div>
+    <button onclick="fetchProfile()" class="w-full bg-indigo-600 text-white py-2 rounded-lg text-sm font-semibold">Refresh Profile</button>
+  </div>
+
+  <script>
+    async function fetchProfile() {
+      try {
+        const res = await fetch('http://localhost:5000/api/user/profile/1');
+        const data = await res.json();
+        if (data.success) {
+          document.getElementById('userName').innerText = data.user.name;
+          document.getElementById('userBalance').innerText = '₹' + data.user.balance;
+        }
+      } catch (err) {
+        console.error('Error:', err);
+      }
+    }
+    fetchProfile();
+  </script>
+</body>
+</html>
