@@ -1,28 +1,169 @@
-const express = require('express');
-const cors = require('cors');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pocket 360 - Admin CRUD Panel</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white min-h-screen p-6">
 
-const app = express();
-const PORT = 5000;
+  <div class="max-w-4xl mx-auto">
+    <h1 class="text-3xl font-bold text-indigo-400 mb-6">Pocket 360 Admin CRUD Panel</h1>
 
-app.use(cors());
-app.use(express.json());
+    <!-- 1. CREATE & UPDATE FORM -->
+    <div class="bg-slate-800 p-6 rounded-xl shadow-lg mb-8 border border-slate-700">
+      <h2 id="formTitle" class="text-xl font-semibold mb-4 text-indigo-300">Add New User</h2>
+      
+      <form id="crudForm" onsubmit="handleFormSubmit(event)" class="space-y-4">
+        <!-- Hidden input for Edit ID -->
+        <input type="hidden" id="userId">
 
-// Demo Users Data
-let usersList = [
-  { id: 1, name: "Rahul Sharma", balance: 500, status: "Active" },
-  { id: 2, name: "Priya Singh", balance: 1200, status: "Active" }
-];
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm text-gray-400 mb-1">User Name</label>
+            <input type="text" id="userName" placeholder="e.g. Rahul Sharma" required 
+                   class="w-full bg-slate-700 text-white p-2.5 rounded-lg border border-slate-600 focus:outline-none focus:border-indigo-500">
+          </div>
 
-// User API
-app.get('/api/user/profile/1', (req, res) => {
-  res.json({ success: true, user: usersList[0] });
-});
+          <div>
+            <label class="block text-sm text-gray-400 mb-1">Balance (₹)</label>
+            <input type="number" id="userBalance" placeholder="e.g. 500" required 
+                   class="w-full bg-slate-700 text-white p-2.5 rounded-lg border border-slate-600 focus:outline-none focus:border-indigo-500">
+          </div>
+        </div>
 
-// Admin API
-app.get('/api/admin/users', (req, res) => {
-  res.json({ success: true, users: usersList });
-});
+        <div class="flex gap-3">
+          <button type="submit" id="submitBtn" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-lg font-semibold text-sm transition">
+            Save User
+          </button>
+          <button type="button" onclick="resetForm()" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2.5 rounded-lg text-sm transition">
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
 
-app.listen(PORT, () => {
-  console.log(`Backend Server Running On: http://localhost:${PORT}`);
-});
+    <!-- 2. READ (USERS LIST TABLE) -->
+    <div class="bg-slate-800 rounded-xl p-6 shadow-lg border border-slate-700">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-semibold text-gray-200">User List</h2>
+        <button onclick="loadUsers()" class="text-xs bg-slate-700 hover:bg-slate-600 text-indigo-300 px-3 py-1.5 rounded-lg">Refresh List</button>
+      </div>
+
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="border-b border-slate-700 text-slate-400 text-sm">
+            <th class="p-3">ID</th>
+            <th class="p-3">Name</th>
+            <th class="p-3">Balance</th>
+            <th class="p-3 text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="userTable" class="divide-y divide-slate-700 text-sm">
+          <!-- Dynamic Data -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = 'http://localhost:5000/api/users';
+
+    // READ: Load All Users
+    async function loadUsers() {
+      try {
+        const res = await fetch(API_URL);
+        const result = await res.json();
+
+        if (result.success) {
+          const tbody = document.getElementById('userTable');
+          tbody.innerHTML = '';
+
+          if (result.data.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="4" class="p-4 text-center text-gray-500">No users found.</td></tr>';
+            return;
+          }
+
+          result.data.forEach(user => {
+            tbody.innerHTML += `
+              <tr class="hover:bg-slate-750">
+                <td class="p-3">#${user.id}</td>
+                <td class="p-3 font-medium text-white">${user.name}</td>
+                <td class="p-3 text-green-400 font-semibold">₹${user.balance}</td>
+                <td class="p-3 text-right space-x-2">
+                  <button onclick="editUser(${user.id}, '${user.name}', ${user.balance})" 
+                          class="bg-blue-600 hover:bg-blue-700 text-xs px-3 py-1 rounded">Edit</button>
+                  <button onclick="deleteUser(${user.id})" 
+                          class="bg-red-600 hover:bg-red-700 text-xs px-3 py-1 rounded">Delete</button>
+                </td>
+              </tr>
+            `;
+          });
+        }
+      } catch (err) {
+        console.error('API Connect Error:', err);
+      }
+    }
+
+    // CREATE & UPDATE (Handle Form Submit)
+    async function handleFormSubmit(event) {
+      event.preventDefault();
+
+      const id = document.getElementById('userId').value;
+      const name = document.getElementById('userName').value;
+      const balance = document.getElementById('userBalance').value;
+
+      if (id) {
+        // UPDATE (PUT Request)
+        await fetch(`${API_URL}/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, balance })
+        });
+      } else {
+        // CREATE (POST Request)
+        await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, balance })
+        });
+      }
+
+      resetForm();
+      loadUsers();
+    }
+
+    // UPDATE: Populate Form with User Data
+    function editUser(id, name, balance) {
+      document.getElementById('userId').value = id;
+      document.getElementById('userName').value = name;
+      document.getElementById('userBalance').value = balance;
+
+      document.getElementById('formTitle').innerText = 'Update User';
+      document.getElementById('submitBtn').innerText = 'Update User';
+    }
+
+    // DELETE: Remove User
+    async function deleteUser(id) {
+      if (confirm('Are you sure you want to delete this user?')) {
+        await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+        loadUsers();
+      }
+    }
+
+    // Reset Form Fields
+    function resetForm() {
+      document.getElementById('userId').value = '';
+      document.getElementById('userName').value = '';
+      document.getElementById('userBalance').value = '';
+
+      document.getElementById('formTitle').innerText = 'Add New User';
+      document.getElementById('submitBtn').innerText = 'Save User';
+    }
+
+    // Load Table on Page Load
+    loadUsers();
+  </script>
+</body>
+</html>
